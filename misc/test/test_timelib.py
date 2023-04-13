@@ -1,9 +1,9 @@
 import time
 
-from core.lib import time as timelib
-from core.lib import secret
 
 if __name__ == '__main__':
+    from core.lib import time as timelib
+    from core.lib import secret
     t = timelib.now()
     print(timelib.to_str(t))
     print(timelib.to_seconds(t))

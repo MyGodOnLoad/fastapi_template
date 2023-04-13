@@ -4,7 +4,12 @@ Time Utilities
 fast approaches to commonly used time/date related functions
 """
 import datetime
-from typing import Optional
+from typing import Optional, Union
+import pandas as pd
+
+
+TZ_SHANGHAI = 'Asia/Shanghai'
+TZ_UTC = 'UTC'
 
 
 def now() -> datetime.datetime:
@@ -24,7 +29,7 @@ def __get_t(t: Optional[datetime.datetime] = None) -> datetime.datetime:
     return t if isinstance(t, datetime.datetime) else now()
 
 
-def to_date(s: str, fmt: str = '%Y-%m-%d %H:%M:%S.%f') -> datetime.datetime:
+def to_datetime(s: str, fmt: str = '%Y-%m-%d %H:%M:%S') -> datetime.datetime:
     """
     get datetime instance from string
     :param s: datetime string
@@ -108,3 +113,62 @@ def to_microseconds_dt(dt: datetime.timedelta) -> int:
     :return: microseconds elapsed
     """
     return int(dt.total_seconds() * 10**6)
+
+
+def to_tz(dt: Union[datetime.datetime, pd.DatetimeIndex], tz: str) -> Union[
+        datetime.datetime, pd.DatetimeIndex]:
+    """
+
+    :param dt:
+    :param tz:
+    :return:
+    """
+    if isinstance(dt, datetime.datetime):
+        dt = pd.to_datetime(dt)
+    if dt.tzinfo is None:
+        new_dt = dt.tz_localize(tz)
+    else:
+        new_dt = dt.tz_convert(tz)
+    return new_dt
+
+
+def to_tz_shanghai(dt: Union[datetime.datetime, pd.DatetimeIndex]) -> Union[
+        datetime.datetime, pd.DatetimeIndex]:
+    """
+    时区转换为'Asia/Shanghai'
+    :param dt:
+    :return:
+    """
+    return to_tz(dt, TZ_SHANGHAI)
+
+
+def to_tz_utc(dt: Union[datetime.datetime, pd.DatetimeIndex]) -> Union[
+        datetime.datetime, pd.DatetimeIndex]:
+    """
+    时区转换为'UTC'
+    :param dt:
+    :return:
+    """
+    return to_tz(dt, TZ_UTC)
+
+
+def to_tz_utc2shanghai(dt: Union[datetime.datetime, pd.DatetimeIndex]) -> Union[
+        datetime.datetime, pd.DatetimeIndex]:
+    """
+    时区先标记为utc，再转换为shanghai
+    :param dt:
+    :return:
+    """
+    return to_tz_shanghai(to_tz_utc(dt))
+
+
+def to_tz_convert(dt: Union[datetime.datetime, pd.DatetimeIndex], target: str, drop_tz=True) -> Union[
+        datetime.datetime, pd.DatetimeIndex]:
+    """转换为上海时区'Asia/Shanghai'后剔除时区"""
+    tz_info = dt.tz
+    if tz_info is not None:
+        if str(dt.tz) != target:
+            dt = dt.tz_convert(target)
+        if drop_tz:
+            dt = pd.to_datetime(dt.strftime('%Y-%m-%d %H:%M:%S'))
+    return dt

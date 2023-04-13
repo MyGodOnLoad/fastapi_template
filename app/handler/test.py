@@ -14,7 +14,7 @@ LOGGER = logger.for_handler('test')
 ROUTER = APIRouter()
 
 
-@ROUTER.get('/api/v1/test/products/{pid}')
+@ROUTER.get('/products/{pid}')
 def get_product_by_id(pid: int):
     """
     get product by id
@@ -27,7 +27,7 @@ def get_product_by_id(pid: int):
     return Resp.ok(data=product.dict())
 
 
-@ROUTER.get('/api/v1/test/products')
+@ROUTER.get('/products')
 def get_products_by_name(name: str = ''):
     """
     get products by name
@@ -39,7 +39,7 @@ def get_products_by_name(name: str = ''):
     return Resp.ok(data=[p.dict() for p in products])
 
 
-@ROUTER.get('/api/v1/test/customers/{cid}')
+@ROUTER.get('/customers/{cid}')
 def get_customer_by_id(cid: int):
     """
     get customer by id
@@ -52,7 +52,7 @@ def get_customer_by_id(cid: int):
     return Resp.ok(data=customer.dict())
 
 
-@ROUTER.get('/api/v1/test/customers')
+@ROUTER.get('/customers')
 def get_customers_by_name(name: str = ''):
     """
     get customers by name
@@ -63,7 +63,7 @@ def get_customers_by_name(name: str = ''):
     return Resp.ok(data=[p.dict() for p in customers])
 
 
-@ROUTER.post('/api/v1/test/products')
+@ROUTER.post('/products')
 def register_product(product: Product):
     """
     register product
@@ -76,7 +76,7 @@ def register_product(product: Product):
     return Resp.ok()
 
 
-@ROUTER.get('/api/v1/test/products/{pid}/buy')
+@ROUTER.get('/products/{pid}/buy')
 def buy_product(pid: int, cid: int, num: int, background_tasks: BackgroundTasks):
     """
     buy a product
@@ -91,7 +91,7 @@ def buy_product(pid: int, cid: int, num: int, background_tasks: BackgroundTasks)
     return Resp.ok(message='invoked buy product transaction')
 
 
-@ROUTER.put('/api/v1/test/products/{pid}/price')
+@ROUTER.put('/products/{pid}/price')
 def modify_price(pid: int, body: Dict[str, Any], background_tasks: BackgroundTasks):
     """
     modify price of a product
@@ -108,7 +108,7 @@ def modify_price(pid: int, body: Dict[str, Any], background_tasks: BackgroundTas
     return Resp.ok(message='invoked modify price transaction')
 
 
-@ROUTER.post('/api/v1/test/upload')
+@ROUTER.post('/upload')
 async def upload_file(file: UploadFile = File(...)):
     """
     an example of uploading file
@@ -129,7 +129,7 @@ async def upload_file(file: UploadFile = File(...)):
     })
 
 
-@ROUTER.websocket('/api/v1/test/health')
+@ROUTER.websocket('/health')
 async def health_check(websocket: WebSocket):
     """
     websocket health check
@@ -141,7 +141,7 @@ async def health_check(websocket: WebSocket):
     await websocket.close()
 
 
-@ROUTER.websocket('/api/v1/test/customer')
+@ROUTER.websocket('/customer')
 async def get_customer_info(websocket: WebSocket):
     """
     a tunnel to get customer info

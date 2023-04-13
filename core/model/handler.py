@@ -10,6 +10,8 @@ class ErrCode(IntEnum):
     """
     SUCCESS = 0
     ERROR = -1
+    PARAM_ERR = 40001
+    FileNotFound = 40002
 
 
 class Resp(ExecRet):
