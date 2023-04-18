@@ -1,6 +1,7 @@
 {
   "version": 1,
   "disable_existing_loggers": false,
+  "root": {"level": "INFO", "handlers": ["default"]},
   "formatters": {
     "default": {
       "()": "uvicorn.logging.DefaultFormatter",
@@ -25,7 +26,9 @@
   },
   "loggers": {
     "": {"handlers": ["default"], "level": "DEBUG"},
-    "uvicorn.error": {"level": "DEBUG"},
-    "uvicorn.access": {"handlers": ["access"], "level": "DEBUG", "propagate": false}
+    "uvicorn.error": {"level": "INFO"},
+    "uvicorn.access": {"handlers": ["access"], "level": "INFO", "propagate": false},
+    "gunicorn.error": {"level": "INFO"},
+    "gunicorn.access": {"handlers": ["access"], "level": "INFO", "propagate": false}
   }
 }

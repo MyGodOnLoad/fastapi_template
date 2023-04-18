@@ -26,7 +26,7 @@ class TestBaseClass(object):
 
 
 class TestHealthCheck(TestBaseClass):
-    relative_url = '/core/health'
+    relative_url = '/api/v1/core/health'
 
     async def test_case(self):
         """服务健康检测"""
@@ -35,7 +35,7 @@ class TestHealthCheck(TestBaseClass):
         assert resp.json() == {"success": True, "message": "ok", "data": None, "code": 200}
 
     @pytest.mark.skip
-    async def test_case(self):
+    async def test_case_1(self):
         """服务健康检测"""
         resp = await self.get()
         assert resp.status_code == 200

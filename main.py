@@ -1,7 +1,9 @@
 import asyncio
 
 import uvicorn
+from dotenv import load_dotenv
 
+from core.gunicorn import WSGIApplication
 from core.lib import util
 from core.lib.cfg import get_cmd_opts, load_cfg
 
@@ -19,6 +21,19 @@ def _set_proactor_eventloop() -> None:
 '''
 
 
+def uvicorn_run(cfg):
+    cfg = cfg.get('uvicorn_cfg')
+    print('launch uvicorn with cfg: %s' % util.pfmt(cfg, width=120))
+    uvicorn.run('app:APP', **cfg)
+
+
+def gunicorn_run(cfg):
+    cfg = cfg.get('gunicorn_cfg')
+    print('launch gunicorn with cfg: %s' % util.pfmt(cfg, width=120))
+    load_dotenv(dotenv_path=cfg.get('env_file'))
+    WSGIApplication('app:APP', cfg).run()
+
+
 def main() -> None:
     """
     main function, steps are:
@@ -29,10 +44,10 @@ def main() -> None:
     :return: None
     """
     opts = get_cmd_opts()
-    print('launch uvicorn with cmd opts: %s' % util.pfmt(opts))
+    print('launch with cmd opts: %s' % util.pfmt(opts))
     cfg = load_cfg(opts['env'])
-    print('launch uvicorn with cfg: %s' % util.pfmt(cfg, width=120))
-    uvicorn.run('app:APP', **cfg)
+    # uvicorn_run(cfg)
+    gunicorn_run(cfg)
 
 
 if __name__ == '__main__':

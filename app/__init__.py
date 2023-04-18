@@ -23,7 +23,7 @@ FASTAPI_CFG = {
     'version': settings.VERSION,
 }
 APP = FastAPI(**FASTAPI_CFG)
-LOGGER.info('launch fastapi application with cfg: %s' % util.pfmt(FASTAPI_CFG))
+LOGGER.info(f'launch fastapi application with cfg: {util.pfmt(FASTAPI_CFG)}')
 
 # 加载核心模块
 init_core_modules(APP)
@@ -52,4 +52,3 @@ for route in APP.routes:
 
 from app.service import test
 test.init_market()
-

@@ -1,5 +1,5 @@
 from core.settings import settings
-from tools.rabbit import RabbitTool
+from core.lib.rabbit import RabbitTool
 
 
 def push_tech_results(result):

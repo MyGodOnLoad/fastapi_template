@@ -1,8 +1,9 @@
 {
   "host": "0.0.0.0",
   "port": 8000,
-  "reload": true,
-  "debug": true,
-  "access_log": false,
+  "workers": 4,
+  "reload": false,
+  "debug": false,
+  "access_log": true,
   "use_colors": true
 }

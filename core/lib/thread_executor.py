@@ -5,7 +5,7 @@ def thread_task(workers_num, task, *args, **kwargs):
     """
     线程执行任务
     task: 任务函数
-    num：线程数量
+    workers_num：线程数量
     Returns
     -------
 

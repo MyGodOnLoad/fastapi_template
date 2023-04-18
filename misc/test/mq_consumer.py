@@ -1,4 +1,4 @@
-from tools.rabbit import RabbitTool
+from core.lib.rabbit import RabbitTool
 
 host = 'rabbitmq'
 port = 5672

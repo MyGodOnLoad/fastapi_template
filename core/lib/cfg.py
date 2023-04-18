@@ -1,3 +1,4 @@
+import configparser
 import getopt
 import json
 import os
@@ -60,8 +61,14 @@ def load_cfg(env: str) -> Dict[str, Any]:
     uvicorn_cfgpath = os.path.join(cfg_dir, 'uvicorn.json')
     uvicorn_cfg = json.loads(open(uvicorn_cfgpath, encoding=util.ENCODING).read())
     assert isinstance(uvicorn_cfg, dict)
+    uvicorn_cfg = dict(default_uvicorn_cfg, **uvicorn_cfg)
 
-    return dict(default_uvicorn_cfg, **uvicorn_cfg)
+    gunicorn_cfgpath = os.path.join(cfg_dir, 'gunicorn.json')
+    gunicorn_cfg = json.loads(open(gunicorn_cfgpath, encoding=util.ENCODING).read())
+    assert isinstance(gunicorn_cfg, dict)
+    gunicorn_cfg.update({'logconfig_dict': logger_cfg, 'env_file': os.path.join(cfg_dir, 'app.cfg')})
+
+    return {'uvicorn_cfg': uvicorn_cfg, 'gunicorn_cfg': gunicorn_cfg}
 
 
 def get_root_path():

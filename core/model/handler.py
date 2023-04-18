@@ -8,8 +8,8 @@ class ErrCode(IntEnum):
     """
     error codes
     """
-    SUCCESS = 0
-    ERROR = -1
+    SUCCESS = 200
+    ERROR = 0
     PARAM_ERR = 40001
     FileNotFound = 40002
 
