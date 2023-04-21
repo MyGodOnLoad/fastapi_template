@@ -26,9 +26,9 @@
   },
   "loggers": {
     "": {"handlers": ["default"], "level": "DEBUG"},
-    "uvicorn.error": {"level": "INFO"},
+    "uvicorn.error": {"handlers": ["default"], "level": "INFO", "propagate": false},
     "uvicorn.access": {"handlers": ["access"], "level": "INFO", "propagate": false},
-    "gunicorn.error": {"level": "INFO"},
+    "gunicorn.error": {"handlers": ["default"], "level": "INFO", "propagate": false},
     "gunicorn.access": {"handlers": ["access"], "level": "INFO", "propagate": false}
   }
 }

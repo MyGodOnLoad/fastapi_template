@@ -40,3 +40,13 @@ class TestHealthCheck(TestBaseClass):
         resp = await self.get()
         assert resp.status_code == 200
         assert resp.json() == {"success": True, "message": "ok", "data": None, "code": 200}
+
+
+class TestCeleryAddTask(TestBaseClass):
+    relative_url = 'api/v2/demo/task'
+
+    async def test_add_task_case(self):
+        """发布celery任务"""
+        resp = await self.post()
+        assert resp.status_code == 200
+        print(resp.json())

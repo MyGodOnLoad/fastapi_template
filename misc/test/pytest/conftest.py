@@ -1,5 +1,4 @@
 import os
-import sys
 import time
 import uuid
 
@@ -8,13 +7,11 @@ import typing
 
 from py.xml import html
 
-Base_Dir = os.path.abspath(__file__).split('misc')[0]
-sys.path.insert(0, Base_Dir)
+from core.lib.cfg import load_env
 
-from core.lib import cfg
+os.environ.setdefault('UNIT_TEST', 'True')
 
-opts = cfg.get_cmd_opts()
-cfg.load_env('dev')
+load_env()
 
 
 UUID: typing.Optional[uuid.uuid4] = None

@@ -1,6 +1,7 @@
 import configparser
 import getopt
 import json
+import multiprocessing
 import os
 import sys
 from typing import Any, Dict
@@ -56,19 +57,42 @@ def load_cfg(env: str) -> Dict[str, Any]:
     default_uvicorn_cfg = {
         'log_config': logger_cfg,
         'env_file': os.path.join(cfg_dir, 'app.cfg'),
-        'loop': 'asyncio'
+        'loop': 'asyncio',
+        'workers': multiprocessing.cpu_count()
     }
     uvicorn_cfgpath = os.path.join(cfg_dir, 'uvicorn.json')
     uvicorn_cfg = json.loads(open(uvicorn_cfgpath, encoding=util.ENCODING).read())
     assert isinstance(uvicorn_cfg, dict)
     uvicorn_cfg = dict(default_uvicorn_cfg, **uvicorn_cfg)
 
+    # gunicorn cfg
+    default_gunicorn_cfg = {
+        'logconfig_dict': logger_cfg,
+        'env_file': os.path.join(cfg_dir, 'app.cfg'),
+        'workers': multiprocessing.cpu_count(),
+        'threads': multiprocessing.cpu_count() * 2,
+        "worker_class": "uvicorn.workers.UvicornWorker",
+    }
     gunicorn_cfgpath = os.path.join(cfg_dir, 'gunicorn.json')
     gunicorn_cfg = json.loads(open(gunicorn_cfgpath, encoding=util.ENCODING).read())
     assert isinstance(gunicorn_cfg, dict)
-    gunicorn_cfg.update({'logconfig_dict': logger_cfg, 'env_file': os.path.join(cfg_dir, 'app.cfg')})
+    gunicorn_cfg = dict(default_gunicorn_cfg, **gunicorn_cfg)
 
     return {'uvicorn_cfg': uvicorn_cfg, 'gunicorn_cfg': gunicorn_cfg}
+
+
+def load_env():
+    """加载配置文件"""
+    PROJECT_ENV = os.environ.get('PROJECT_ENV')
+    if PROJECT_ENV is None:
+        sys.exit('指定环境变量PROJECT_ENV')
+    else:
+        ROOT_PATH = get_root_path()
+        conf_file = os.path.join(ROOT_PATH, 'cfg', PROJECT_ENV, 'app.cfg')
+        if os.path.exists(conf_file):
+            load_dotenv(dotenv_path=conf_file)
+        else:
+            sys.exit(f'配置文件不存在：{conf_file}')
 
 
 def get_root_path():
@@ -91,12 +115,6 @@ def get_cfg_path(env: str) -> str:
     """
     root_path = get_root_path()
     return os.path.join(root_path, 'cfg', env, 'app.cfg')
-
-
-def load_env(env):
-    """加载服务环境"""
-    env_file = get_cfg_path(env=env)
-    load_dotenv(dotenv_path=env_file)
 
 
 def get(key: str, default: Any = '') -> Any:

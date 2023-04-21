@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     VERSION: str
 
     # 是否单元测试
-    UNIT_TEST: str
+    UNIT_TEST: str = 'False'
 
     RABBITMQ_HOST: str
     RABBITMQ_PORT: str

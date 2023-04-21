@@ -9,6 +9,7 @@ from uuid import uuid4
 
 from fastapi import APIRouter
 
+from celery_server.task_level_1 import test_task1
 from core.lib import logger
 from core.model.handler import Resp
 
@@ -47,3 +48,19 @@ async def test3():
     print(f'middle--{uuid}')
     LOGGER.info('test3')
     print(f'end---{uuid}')
+
+
+@ROUTER.post('/task')
+async def add_task():
+    """
+    发送celery任务
+    """
+    tasks = []
+    for i in range(3):
+        task = test_task1.delay('Hello World')
+        tasks.append(task)
+
+    results = [task.get() for task in tasks]
+    print(results)
+
+    return Resp.ok('Hello World')
