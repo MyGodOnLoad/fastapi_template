@@ -1,15 +1,20 @@
 import cProfile
+import functools
 import os
 import pstats
 
-BASE_PATH = './prof'
 
-
-def do_cprofile():
+def do_cprofile(filepath=None):
     """
     Decorator for function profiling.
     """
+    if not filepath:
+        filepath = './prof'
+    if not os.path.exists(filepath):
+        os.makedirs(filepath)
+
     def wrapper(func):
+        @functools.wraps(func)
         def profiled_func(*args, **kwargs):
             DO_PROF = os.getenv("PROFILING")
             if DO_PROF:
@@ -23,8 +28,8 @@ def do_cprofile():
 
                 prof_file = func.__name__ + '.prof'
                 img_file = func.__name__ + '.png'
-                prof_file = os.path.join(BASE_PATH, prof_file)
-                img_file = os.path.join(BASE_PATH, img_file)
+                prof_file = os.path.join(filepath, prof_file)
+                img_file = os.path.join(filepath, img_file)
 
                 ps.dump_stats(prof_file)
                 res = os.system(f"gprof2dot -f pstats {prof_file} | dot -Tpng -o {img_file}")

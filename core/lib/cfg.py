@@ -70,7 +70,7 @@ def load_cfg(env: str) -> Dict[str, Any]:
         'logconfig_dict': logger_cfg,
         'env_file': os.path.join(cfg_dir, 'app.cfg'),
         'workers': multiprocessing.cpu_count(),
-        'threads': multiprocessing.cpu_count() * 2,
+        'threads': 2,
         "worker_class": "uvicorn.workers.UvicornWorker",
     }
     gunicorn_cfgpath = os.path.join(cfg_dir, 'gunicorn.json')

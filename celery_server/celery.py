@@ -32,6 +32,11 @@ celery_app.conf.task_routes = CELERY_ROUTES
 celery_app.conf.result_expires = 3600  # 任务结果保存时间
 celery_app.conf.task_acks_late = True  # 启用延迟确认
 celery_app.conf.worker_prefetch_multiplier = 1
+celery_app.conf.result_compression = 'zlib'  # 指定数据传输的压缩方法,结果数据需要自行解压缩
 
 celery_app.conf.task_track_started = True  # worker执行时标记为‘已启动’
 celery_app.conf.task_always_eager = bool(settings.UNIT_TEST == "True")
+
+# todo:task中使用进程池, celery为fork进程，守护进程不能创建子进程
+# todo:主动关闭task任务
+

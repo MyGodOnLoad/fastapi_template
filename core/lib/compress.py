@@ -65,3 +65,6 @@ class Compressor(object):
         compressed_date_bytes = base64.b64decode(compressed_date_str.encode())
         content = self.decompress(compressed_date_bytes)
         return content
+
+
+compressor = Compressor('zlib')

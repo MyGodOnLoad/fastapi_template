@@ -9,8 +9,10 @@ from uuid import uuid4
 
 from fastapi import APIRouter
 
-from celery_server.task_level_1 import test_task1
+from celery_server.task_level_1 import test_task1, test_task3, test_task5
 from core.lib import logger
+from core.lib.cprofile import do_cprofile
+from core.lib.time_it import time_it
 from core.model.handler import Resp
 
 ROUTER = APIRouter()
@@ -50,6 +52,21 @@ async def test3():
     print(f'end---{uuid}')
 
 
+@ROUTER.get('/test4')
+async def test4():
+    """
+    在异步函数内存在同步语句
+    """
+    func()
+    return Resp.ok('test4')
+
+
+@time_it
+@do_cprofile('prof')
+def func():
+    time.sleep(1)
+
+
 @ROUTER.post('/task')
 async def add_task():
     """
@@ -63,4 +80,24 @@ async def add_task():
     results = [task.get() for task in tasks]
     print(results)
 
+    return Resp.ok('Hello World')
+
+
+@ROUTER.get('/task2')
+async def task2():
+    """
+    发送celery任务
+    """
+    task = test_task3.delay('Hello World')
+    print(task.get())
+    return Resp.ok('Hello World')
+
+
+@ROUTER.get('/task3')
+async def task3():
+    """
+    发送celery任务
+    """
+    task = test_task5.delay('Hello World')
+    print(task.get())
     return Resp.ok('Hello World')

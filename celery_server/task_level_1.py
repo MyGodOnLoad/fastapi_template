@@ -1,7 +1,9 @@
+import json
 import time
 
 from celery_server.celery import celery_app
-from celery_server.task_level_2 import test_task2
+from celery_server.task_level_2 import test_task2, test_task4, test_task6
+from core.lib.compress import compressor
 
 
 @celery_app.task(rate_limit='10/m')
@@ -16,8 +18,30 @@ def test_task1(word: str) -> str:
     for task in tasks:
         while not task.ready():
             print(task.status)
-            time.sleep(0.1)
+            time.sleep(1)
         result = task.get(disable_sync_subtasks=False)
         results.append(result)
     print(results)
+    return f"test task return {word}"
+
+
+@celery_app.task()
+def test_task3(word: str) -> str:
+    params = {'words': 'Hello World'}
+    data = compressor.compress_base64(json.dumps(params))
+    task = test_task4.delay(data)
+
+    result = task.get(disable_sync_subtasks=False)
+    print(result)
+    return f"test task return {word}"
+
+
+@celery_app.task()
+def test_task5(word: str) -> str:
+    params = {'words': 'Hello World'}
+    task = test_task6.delay(params)
+
+    result = task.get(disable_sync_subtasks=False)
+    print(result)
+    print(type(result))
     return f"test task return {word}"
