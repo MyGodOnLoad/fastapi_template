@@ -9,7 +9,6 @@ from uuid import uuid4
 
 from fastapi import APIRouter
 
-from celery_server.task_level_1 import test_task1, test_task3, test_task5
 from core.lib import logger
 from core.lib.cprofile import do_cprofile
 from core.lib.time_it import time_it
@@ -72,6 +71,7 @@ async def add_task():
     """
     发送celery任务
     """
+    from celery_server.task_level_1 import test_task1
     tasks = []
     for i in range(3):
         task = test_task1.delay('Hello World')
@@ -88,6 +88,7 @@ async def task2():
     """
     发送celery任务
     """
+    from celery_server.task_level_1 import test_task3
     task = test_task3.delay('Hello World')
     print(task.get())
     return Resp.ok('Hello World')
@@ -98,6 +99,7 @@ async def task3():
     """
     发送celery任务
     """
+    from celery_server.task_level_1 import test_task5
     task = test_task5.delay('Hello World')
     print(task.get())
     return Resp.ok('Hello World')

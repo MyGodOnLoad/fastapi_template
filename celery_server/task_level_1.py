@@ -1,12 +1,13 @@
 import json
 import time
 
-from celery_server.celery import celery_app
+from celery import shared_task
+
 from celery_server.task_level_2 import test_task2, test_task4, test_task6
 from core.lib.compress import compressor
 
 
-@celery_app.task(rate_limit='10/m')
+@shared_task(rate_limit='10/m', queue='task_level_1')
 def test_task1(word: str) -> str:
     tasks = []
     for i in range(10):
@@ -25,7 +26,7 @@ def test_task1(word: str) -> str:
     return f"test task return {word}"
 
 
-@celery_app.task()
+@shared_task()
 def test_task3(word: str) -> str:
     params = {'words': 'Hello World'}
     data = compressor.compress_base64(json.dumps(params))
@@ -36,7 +37,7 @@ def test_task3(word: str) -> str:
     return f"test task return {word}"
 
 
-@celery_app.task()
+@shared_task()
 def test_task5(word: str) -> str:
     params = {'words': 'Hello World'}
     task = test_task6.delay(params)

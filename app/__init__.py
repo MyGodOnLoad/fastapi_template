@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from starlette.routing import Route, WebSocketRoute
 
 from core import init_core_modules
+from core.celery.celery import register_celery
 from core.lib import util, logger
 from core.settings import settings
 from .exception import register_exceptions
@@ -37,6 +38,8 @@ for middleware in APP.user_middleware:
 
 # 注册业务路由
 register_router(APP)
+# 注册celery
+register_celery(APP)
 # 注册定时任务
 register_scheduler(APP)
 
