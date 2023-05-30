@@ -3,12 +3,13 @@ from core.lib.rabbit import RabbitTool
 
 
 def push_tech_results(result):
+    rabbitmq = settings.rabbitmq
     rabbit_app = RabbitTool(
-        settings.RABBITMQ_HOST,
-        settings.RABBITMQ_PORT,
-        settings.RABBITMQ_USERNAME,
-        settings.RABBITMQ_PASSWORD,
-        settings.RABBITMQ_VHOST,
+        rabbitmq.host,
+        rabbitmq.port,
+        rabbitmq.username,
+        rabbitmq.password,
+        rabbitmq.vhost,
     )
     exchange_name = 'test'
     queue_name = 'test_result'

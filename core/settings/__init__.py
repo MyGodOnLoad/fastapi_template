@@ -4,7 +4,7 @@ from core.lib import util
 from core.lib.cfg import load_env
 from core.settings.nacos.client import NacosClient
 from core.settings.settings import Settings, NacosSettings
-from core.settings.watchers import refresh_settings, watcher1
+from core.settings.watchers import refresh_settings, watcher1, watcher2
 
 settings: Settings
 nacos_settings: NacosSettings
@@ -63,7 +63,9 @@ def load_config():
     settings = ms.get_settings()
     print('setting配置: %s' % util.pfmt(settings.dict(), width=120))
 
-    nc_settings.add_watchers([watcher1, refresh_settings])
+    # ! 多进程报错：cannot pickle '_thread.RLock' object
+    # nc_settings.add_config_watchers([watcher1, refresh_settings])
+    nc_settings.add_watchers([watcher1, watcher2])
 
 
 load_config()
