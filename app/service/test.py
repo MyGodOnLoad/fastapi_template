@@ -1,7 +1,7 @@
 import time
 from typing import List, Optional
 
-from app.model.test import Product, Customer, Market, MarketTransCode
+from app.schema.test import Product, Customer, Market, MarketTransCode
 from core.lib import logger
 from core.model.base import ExecRet
 from core.service import trans as trans_service

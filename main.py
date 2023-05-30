@@ -1,4 +1,5 @@
 import asyncio
+import nb_log
 
 import uvicorn
 from dotenv import load_dotenv
@@ -46,8 +47,8 @@ def main() -> None:
     opts = get_cmd_opts()
     print('launch with cmd opts: %s' % util.pfmt(opts))
     cfg = load_cfg(opts['env'])
-    # uvicorn_run(cfg)
-    gunicorn_run(cfg)
+    uvicorn_run(cfg)
+    # gunicorn_run(cfg)
 
 
 if __name__ == '__main__':

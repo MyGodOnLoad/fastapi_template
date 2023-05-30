@@ -3,6 +3,7 @@
 ### Example user template
 
 logs/
+nacos-data
 
 # IntelliJ project files
 .idea

@@ -14,8 +14,7 @@ def celery_init():
     from core.celery import celeryconfig
     from core.settings import settings
 
-    CELERY_NAME = settings.CELERY_NAME
-    celery_app = Celery(CELERY_NAME)
+    celery_app = Celery(settings.celery.name)
     celery_app.config_from_object(celeryconfig)
     celery_app.autodiscover_tasks(packages=['celery_server'])
     return celery_app

@@ -3,7 +3,7 @@ from typing import Dict, Any
 from fastapi import APIRouter, UploadFile, File, WebSocket, BackgroundTasks
 from starlette.websockets import WebSocketDisconnect
 
-from app.model.test import MarketTransCode, Product
+from app.schema.test import MarketTransCode, Product
 from app.service import test as test_service
 from core.lib import util, logger
 from core.model.handler import Resp
