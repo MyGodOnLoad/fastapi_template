@@ -26,3 +26,4 @@ databases==0.7.0   // 异步访问SQL数据库
 asyncpg==0.27.0  // PostgreSQL数据库的异步驱动程序
 nacos-sdk-python
 nb_log
+funboost==21.0

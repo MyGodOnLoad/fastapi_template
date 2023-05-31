@@ -51,21 +51,21 @@ class MultiSettings(object):
 def load_config():
     global settings, nacos_settings
 
-    nacos_settings = NacosSettings()
-    nc_settings = NacosClient(**nacos_settings.dict())
-    local_settings = Settings()
-
     ms = MultiSettings()
 
-    # 数字越大，优先级越高
-    ms.register_settings(1, nc_settings)
+    nacos_settings = NacosSettings()
+    if nacos_settings.host:
+        nc_settings = NacosClient(**nacos_settings.dict())
+        # ! 多进程报错：cannot pickle '_thread.RLock' object
+        # nc_settings.add_config_watchers([watcher1, refresh_settings])
+        nc_settings.add_watchers([watcher1, watcher2])
+        ms.register_settings(1, nc_settings)  # 数字越大，优先级越高
+
+    local_settings = Settings()
     ms.register_settings(2, local_settings)
+
     settings = ms.get_settings()
     print('setting配置: %s' % util.pfmt(settings.dict(), width=120))
-
-    # ! 多进程报错：cannot pickle '_thread.RLock' object
-    # nc_settings.add_config_watchers([watcher1, refresh_settings])
-    nc_settings.add_watchers([watcher1, watcher2])
 
 
 load_config()

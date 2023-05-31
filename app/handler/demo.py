@@ -9,6 +9,7 @@ from uuid import uuid4
 
 from fastapi import APIRouter
 
+from app.tasks import task_add
 from core.lib import logger
 from core.lib.cprofile import do_cprofile
 from core.lib.time_it import time_it
@@ -103,3 +104,20 @@ async def task3():
     task = test_task5.delay('Hello World')
     print(task.get())
     return Resp.ok('Hello World')
+
+
+@ROUTER.get('/task4')
+async def task4():
+    """
+    使用funboost
+    Returns
+    -------
+
+    """
+    tasks = []
+    for i in range(10):
+        task = task_add.push(i, i * 2)
+        tasks.append(task)
+
+    results = [task.result for task in tasks]
+    return Resp.ok(f'{results = }')

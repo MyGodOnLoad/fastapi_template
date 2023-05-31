@@ -10,14 +10,14 @@ class ContentType(str, Enum):
 
 
 class NacosSettings(BaseSettings):
-    host: str
-    port: str
+    host: Optional[str]
+    port: Optional[str]
     username: Optional[str]
     password: Optional[str]
-    namespace: str
-    group: str
-    data_id: str
-    content_type: str = ContentType.yaml
+    namespace: Optional[str]
+    group: Optional[str]
+    data_id: Optional[str]
+    content_type: Optional[str] = ContentType.yaml
 
     class Config:
         env_prefix = 'NACOS_'
